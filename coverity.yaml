@@ -1,0 +1,9 @@
+capture:
+  build:
+    build-command: gcc .\hello-world.cpp -lstdc++ -o helloworld
+    clean-command: del helloworld.exe
+  
+commit:
+  connect:
+    stream: cpp-hello-world-master
+    url: http://localhost:8080
