@@ -25,9 +25,9 @@ jobs:
       if: ${{ github.event_name != 'pull_request' }}
       run: |
         set -x
-        $COVERITY_PATH\bin\cov-build --dir idir $BLDCMD
-        $COVERITY_PATH\bin\cov-analyze --dir idir $CHECKERS --ticker-mode none --strip-path $GITHUB_WORKSPACE $CHECKERS
-        $COVERITY_PATH\bin\cov-commit-defects --dir idir --ticker-mode none --url $COV_URL --stream $COVERITY_PROJECT-${GITHUB_REF##*/} --scm git \
+        cov-build --dir idir $BLDCMD
+        cov-analyze --dir idir $CHECKERS --ticker-mode none --strip-path $GITHUB_WORKSPACE $CHECKERS
+        cov-commit-defects --dir idir --ticker-mode none --url $COV_URL --stream $COVERITY_PROJECT-${GITHUB_REF##*/} --scm git \
           --description $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID --target $RUNNER_OS --version $GITHUB_SHA
 
     # - name: Coverity Quality Gate
@@ -45,6 +45,6 @@ jobs:
       if: ${{ github.event_name == 'pull_request' && steps.changeset.outputs.added_modified != '' }}
       run: |
         set -x
-        $COVERITY_PATH\bin\cov-run-desktop --dir idir --url $COV_URL --stream $COVERITY_PROJECT-$GITHUB_BASE_REF --build $BLDCMD
-        $COVERITY_PATH\bin\cov-run-desktop --dir idir --url $COV_URL --stream $COVERITY_PROJECT-$GITHUB_BASE_REF --present-in-reference false \
+        cov-run-desktop --dir idir --url $COV_URL --stream $COVERITY_PROJECT-$GITHUB_BASE_REF --build $BLDCMD
+        cov-run-desktop --dir idir --url $COV_URL --stream $COVERITY_PROJECT-$GITHUB_BASE_REF --present-in-reference false \
           --ignore-uncapturable-inputs true --exit1-if-defects true ${{ steps.changeset.outputs.added_modified }}
