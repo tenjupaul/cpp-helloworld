@@ -38,5 +38,5 @@ jobs:
     - name: Coverity Incremental Scan
       if: ${{ github.event_name == 'pull_request' && steps.changeset.outputs.added_modified != '' }}
       run: |
-        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-$GITHUB_BASE_REF --build gcc .\hello-world.cpp -lstdc++ -o helloworld
-        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-$GITHUB_BASE_REF --present-in-reference false --ignore-uncapturable-inputs true --exit1-if-defects true ${{ steps.changeset.outputs.added_modified }}
+        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-main --build gcc .\hello-world.cpp -lstdc++ -o helloworld
+        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-main --present-in-reference false --ignore-uncapturable-inputs true --exit1-if-defects true ${{ steps.changeset.outputs.added_modified }}
