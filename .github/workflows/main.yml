@@ -3,7 +3,8 @@ on:
   push:
     branches: [ master, stage, 'releases/**' ]
   pull_request:
-    branches: [ master, stage, 'releases/**' ]
+    # branches: [ master, stage, 'releases/**' ]
+    types: [opened, reopened]
   workflow_dispatch:
 
 jobs:
