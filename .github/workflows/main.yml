@@ -32,9 +32,12 @@ jobs:
 
     - name: Coverity Quality Gate
       if: ${{ github.event_name != 'pull_request' }}
+      shell: pwsh
       run: |
         curl -fLsS --user $env:COV_USER:$env:COVERITY_PASSPHRASE $env:COV_URL/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=$env:COVERITY_PROJECT > results.json
-        if ($(cat results.json | jq .viewContentsV1.totalRows) -ne 0 ); then cat results.json | jq .viewContentsV1.rows; exit 1; fi
+        $json = Get-Content -Raw -Path "results.json" | ConvertFrom-Json
+        if ($json.viewContentsV1.rows -ne 0) {$json.viewContentsV1.rows | ConvertTo-Json -Depth 10 exit 1}
+     #   if [$(cat results.json | jq .viewContentsV1.totalRows) -ne 0 ]; then cat results.json | jq .viewContentsV1.rows; exit 1; fi
 
     - id: changeset
       name: Get Pull Request Changeset
@@ -45,5 +48,4 @@ jobs:
       if: ${{ github.event_name == 'pull_request' && steps.changeset.outputs.added_modified != '' }}
       run: |
         cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-$GITHUB_BASE_REF --build gcc .\hello-world.cpp -lstdc++ -o helloworld
-        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-$GITHUB_BASE_REF --present-in-reference false \
-          --ignore-uncapturable-inputs true --exit1-if-defects true ${{ steps.changeset.outputs.added_modified }}
+        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-$GITHUB_BASE_REF --present-in-reference false --ignore-uncapturable-inputs true --exit1-if-defects true ${{ steps.changeset.outputs.added_modified }}
