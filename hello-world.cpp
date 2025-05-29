@@ -10,14 +10,14 @@ int main() {
 
 }
 
-// int leak_example(int c) {
-//   void *p = malloc(10);
-//   if(c)
-//     return -1;   // "p" is leaked
-//   /* ... */
-//   free(p);
-//   return 0;
-// }
+int leak_example(int c) {
+  void *p = malloc(10);
+  if(c)
+    return -1;   // "p" is leaked
+  /* ... */
+  free(p);
+  return 0;
+}
 
 
 // Dead Code example
