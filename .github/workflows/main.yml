@@ -24,8 +24,8 @@ jobs:
     - name: Coverity Full Scan
       if: ${{ github.event_name != 'pull_request' }}
       run: |
-        cov-build --dir idir $BLDCMD
-        cov-analyze --dir idir $CHECKERS --ticker-mode none --strip-path $GITHUB_WORKSPACE $CHECKERS
+        cov-build --dir idir gcc .\hello-world.cpp -lstdc++ -o helloworld
+        cov-analyze --dir idir --all --enable-constraint-fpp --enable-fnptr --enable-virtual --ticker-mode none 
         cov-commit-defects --dir idir --ticker-mode none --url $COV_URL --stream $COVERITY_PROJECT-${GITHUB_REF##*/} 
 
     # - name: Coverity Quality Gate
