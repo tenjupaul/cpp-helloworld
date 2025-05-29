@@ -21,6 +21,7 @@ jobs:
       CHECKERS: --all --enable-constraint-fpp --enable-fnptr --enable-virtual
 
     steps:
+    - uses: actions/checkout@v2
     - name: Coverity Full Scan
       if: ${{ github.event_name != 'pull_request' }}
       run: |
