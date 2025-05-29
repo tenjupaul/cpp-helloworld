@@ -27,7 +27,7 @@ jobs:
       run: |
         cov-build --dir idir gcc .\hello-world.cpp -lstdc++ -o helloworld
         cov-analyze --dir idir --all --enable-constraint-fpp --enable-fnptr --enable-virtual --ticker-mode none 
-        cov-commit-defects --dir idir --ticker-mode none --url $COV_URL --stream $COVERITY_PROJECT-${GITHUB_REF##*/} 
+        cov-commit-defects --dir idir --ticker-mode none --url $env:COV_URL --stream $env:COVERITY_PROJECT-${GITHUB_REF##*/} 
 
     # - name: Coverity Quality Gate
     #   if: ${{ github.event_name != 'pull_request' }}
@@ -43,6 +43,6 @@ jobs:
     - name: Coverity Incremental Scan
       if: ${{ github.event_name == 'pull_request' && steps.changeset.outputs.added_modified != '' }}
       run: |
-        cov-run-desktop --dir idir --url $COV_URL --stream $COVERITY_PROJECT-$GITHUB_BASE_REF --build $BLDCMD
-        cov-run-desktop --dir idir --url $COV_URL --stream $COVERITY_PROJECT-$GITHUB_BASE_REF --present-in-reference false \
+        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-$GITHUB_BASE_REF --build $env:BLDCMD
+        cov-run-desktop --dir idir --url $env:COV_URL --stream $env:COVERITY_PROJECT-$GITHUB_BASE_REF --present-in-reference false \
           --ignore-uncapturable-inputs true --exit1-if-defects true ${{ steps.changeset.outputs.added_modified }}
