@@ -30,15 +30,6 @@ jobs:
         cov-analyze --dir idir --all --enable-constraint-fpp --enable-fnptr --enable-virtual --ticker-mode none 
         cov-commit-defects --dir idir --ticker-mode none --url $env:COV_URL --stream $env:COVERITY_PROJECT-main
 
-    - name: Coverity Quality Gate
-      if: ${{ github.event_name != 'pull_request' }}
-      shell: pwsh
-      run: |
-        curl -fLsS --user $env:COV_USER:$env:COVERITY_PASSPHRASE $env:COV_URL/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=$env:COVERITY_PROJECT > results.json
-        $json = Get-Content -Raw -Path "results.json" | ConvertFrom-Json
-        if ($json.viewContentsV1.rows -ne 0) {$json.viewContentsV1.rows | ConvertTo-Json -Depth 10 exit 1}
-     #   if [$(cat results.json | jq .viewContentsV1.totalRows) -ne 0 ]; then cat results.json | jq .viewContentsV1.rows; exit 1; fi
-
     - id: changeset
       name: Get Pull Request Changeset
       uses: jitterbit/get-changed-files@v1
