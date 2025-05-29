@@ -8,8 +8,8 @@ on:
 
 jobs:
   Coverity:
-
     runs-on: self-hosted
+    environment: tenju-test
 
     env:
       COV_URL: ${{ secrets.COV_URL }}
